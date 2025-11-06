@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfig {
+
     @Value("${frontend.url}")
     private String frontendUrl;
 
@@ -17,8 +18,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins(frontendUrl)
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        // ✅ Allow your React frontend
+                        // ✅ Allow Chrome extensions
+                        // ✅ Allow Gmail domain (where the content script runs)
+                        .allowedOriginPatterns(frontendUrl, "chrome-extension://*", "https://mail.google.com")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }
